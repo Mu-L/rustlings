@@ -22,6 +22,7 @@
 - `structs3`: Rewrote the exercise to make users type method syntax themselves.
 - Rename the exercises for smart pointers and conversions so they're sorted alphabetically. [@foxfromworld](https://github.com/foxfromworld)
 - `vecs1`: Remove array literal. Some learners assumed their task is to convert it to a vector.
+- `conversions2`: Redesign the context such that infallible conversion makes sense.
 
 ## 6.5.0 (2025-08-21)
 
