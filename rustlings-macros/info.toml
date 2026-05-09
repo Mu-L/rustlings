@@ -438,8 +438,14 @@ name = "enums2"
 dir = "08_enums"
 test = false
 hint = """
-You can create enumerations that have different variants with different types
-such as struct-like, tuple-like and unit-only variants."""
+Enum variants can be defined using three different forms: struct-, tuple- and
+unit-like. Here's an example enum definition, which uses all three forms:
+
+enum EnumUsingAllVariantForms {
+    StructLike { named_field: bool },
+    TupleLike(bool),
+    UnitLike,
+}"""
 
 [[exercises]]
 name = "enums3"
