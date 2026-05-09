@@ -21,7 +21,7 @@ get started, here are some notes about how Rustlings operates:
 
 final_message = """
 We hope you enjoyed learning about the various aspects of Rust!
-If you noticed any issues, don't hesitate to report them on Github.
+If you noticed any issues, don't hesitate to report them on GitHub.
 You can also contribute your own exercises to help the greater community!
 
 Before reporting an issue or contributing, please read our guidelines:
@@ -318,16 +318,7 @@ of the Rust book to learn more."""
 name = "vecs2"
 dir = "05_vecs"
 hint = """
-In the first function, we create an empty vector and want to push new elements
-to it.
-
-In the second function, we map the values of the input and collect them into
-a vector.
-
-After you've completed both functions, decide for yourself which approach you
-like better.
-
-What do you think is the more commonly used pattern under Rust developers?"""
+Use the `.push()` method on the vector to push new elements to it."""
 
 # MOVE SEMANTICS
 
@@ -426,11 +417,10 @@ https://doc.rust-lang.org/book/ch05-01-defining-structs.html#creating-instances-
 name = "structs3"
 dir = "07_structs"
 hint = """
-For `is_international`: What makes a package international? Seems related to
-the places it goes through right?
-
-For `get_fees`: This method takes an additional argument, is there a field in
-the `Package` struct that this relates to?
+Methods and associated functions are both declared in an `impl MyType {}`
+block. Methods have a `self`, `&self` or `&mut self` parameter, where `self`
+implicitly has the type of the impl block. Associated functions do not have
+a `self` parameter.
 
 Have a look in The Book to find out more about method implementations:
 https://doc.rust-lang.org/book/ch05-03-method-syntax.html"""
@@ -449,7 +439,7 @@ dir = "08_enums"
 test = false
 hint = """
 You can create enumerations that have different variants with different types
-such as anonymous structs, structs, a single string, tuples, no data, etc."""
+such as struct-like, tuple-like and unit-only variants."""
 
 [[exercises]]
 name = "enums3"
