@@ -1171,9 +1171,8 @@ Use the `as` operator to cast one of the operands in the last line of the
 name = "conversions2"
 dir = "23_conversions"
 hint = """
-Implement From<FairyCredit> for GnomeCoin. Check the documentation of `From` to
-learn about its required items:
-https://doc.rust-lang.org/std/convert/trait.From.html"""
+For the conversion from Fahrenheit to Celsius, you have to determine the formula
+yourself. Don't forget the order of operations!"""
 
 [[exercises]]
 name = "conversions3"

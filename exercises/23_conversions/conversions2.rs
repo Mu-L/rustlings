@@ -3,50 +3,52 @@
 // You can read more about it in the documentation:
 // https://doc.rust-lang.org/std/convert/trait.From.html
 //
-// Frank the fairy would like to buy some truffles from Grace the gnome, a
-// world-renowned chocolatier. The truffles are priced in GnomeCoin though, and
-// Frank only has FairyCredit. Help Frank by providing a `From` implementation
-// to convert his FairyCredit to GnomeCoin. At the current exchange rate, one
-// FairyCredit is valued at 100 GnomeCoin.
+// Representing units of measurements with separate types is a common practice.
+// It avoids accidentally mixing up values of different units of measurement.
 
-#[derive(Debug)]
-struct FairyCredit(u32);
+struct Celsius(f64);
 
-#[derive(Debug, PartialEq)]
-struct GnomeCoin(u64);
+struct Fahrenheit(f64);
 
-impl From<FairyCredit> for GnomeCoin {
-    // TODO: implement From<FairyCredit> for GnomeCoin
+impl From<Celsius> for Fahrenheit {
+    // TODO: Convert Celsius to Fahrenheit. Don't worry about floating-point
+    // precision. The formula is: F = C * 1.8 + 32
 }
 
-// Note that we shouldn't provide the opposite conversion: from GnomeCoin to
-// FairyCredits. That's because less than 100 GnomeCoins cannot be represented
-// as FairyCredits, which would make the conversion lossy. The `From` trait is
-// only appropriate for infallible and lossless conversions.
+impl From<Fahrenheit> for Celsius {
+    // TODO: Convert Fahrenheit to Celsius.
+}
 
 fn main() {
-    // Use the `from` function.
-    let g1 = GnomeCoin::from(FairyCredit(12));
-    println!("{g1:?}");
-
-    // Since `From` is implemented for GnomeCoin, we are able to use `Into`.
-    let g2: GnomeCoin = FairyCredit(9).into();
-    println!("{g2:?}");
+    // You can optionally experiment here.
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
+    const CASES: [(f64, f64); 6] = [
+        (-50.0, -58.0),
+        (0.0, 32.0),
+        (20.0, 68.0),
+        (100.0, 212.0),
+        (400.0, 752.0),
+        (1000.0, 1832.0),
+    ];
+
     #[test]
-    fn test_from() {
-        let g = GnomeCoin::from(FairyCredit(12));
-        assert_eq!(g, GnomeCoin(1200));
+    fn celsius_to_fahrenheit() {
+        for (celsius, fahrenheit) in CASES {
+            let Fahrenheit(actual) = Celsius(celsius).into();
+            assert_eq!(actual.round(), fahrenheit);
+        }
     }
 
     #[test]
-    fn test_into() {
-        let g: GnomeCoin = FairyCredit(9).into();
-        assert_eq!(g, GnomeCoin(900));
+    fn fahrenheit_to_celsius() {
+        for (celsius, fahrenheit) in CASES {
+            let Celsius(actual) = Fahrenheit(fahrenheit).into();
+            assert_eq!(actual.round(), celsius);
+        }
     }
 }
