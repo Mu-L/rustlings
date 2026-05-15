@@ -2,135 +2,56 @@
 // implemented, an implementation of `Into` is automatically provided.
 // You can read more about it in the documentation:
 // https://doc.rust-lang.org/std/convert/trait.From.html
+//
+// Representing units of measurements with separate types is a common practice.
+// It avoids accidentally mixing up values of different units of measurement.
 
-#[derive(Debug)]
-struct Person {
-    name: String,
-    age: u8,
-}
+struct Celsius(f64);
 
-// We implement the Default trait to use it as a fallback when the provided
-// string is not convertible into a `Person` object.
-impl Default for Person {
-    fn default() -> Self {
-        Self {
-            name: String::from("John"),
-            age: 30,
-        }
+struct Fahrenheit(f64);
+
+impl From<Celsius> for Fahrenheit {
+    fn from(Celsius(celsius): Celsius) -> Self {
+        Fahrenheit(celsius * 1.8 + 32.0)
     }
 }
 
-impl From<&str> for Person {
-    fn from(s: &str) -> Self {
-        let mut split = s.split(',');
-        let (Some(name), Some(age), None) = (split.next(), split.next(), split.next()) else {
-            //                      ^^^^ there should be no third element
-            return Self::default();
-        };
-
-        if name.is_empty() {
-            return Self::default();
-        }
-
-        let Ok(age) = age.parse() else {
-            return Self::default();
-        };
-
-        Self {
-            name: name.into(),
-            age,
-        }
+impl From<Fahrenheit> for Celsius {
+    fn from(Fahrenheit(fahrenheit): Fahrenheit) -> Self {
+        Celsius((fahrenheit - 32.0) / 1.8)
     }
 }
 
 fn main() {
-    // Use the `from` function.
-    let p1 = Person::from("Mark,20");
-    println!("{p1:?}");
-
-    // Since `From` is implemented for Person, we are able to use `Into`.
-    let p2: Person = "Gerald,70".into();
-    println!("{p2:?}");
+    // You can optionally experiment here.
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
+    const CASES: [(f64, f64); 6] = [
+        (-50.0, -58.0),
+        (0.0, 32.0),
+        (20.0, 68.0),
+        (100.0, 212.0),
+        (400.0, 752.0),
+        (1000.0, 1832.0),
+    ];
+
     #[test]
-    fn test_default() {
-        let dp = Person::default();
-        assert_eq!(dp.name, "John");
-        assert_eq!(dp.age, 30);
+    fn celsius_to_fahrenheit() {
+        for (celsius, fahrenheit) in CASES {
+            let Fahrenheit(actual) = Celsius(celsius).into();
+            assert_eq!(actual.round(), fahrenheit);
+        }
     }
 
     #[test]
-    fn test_bad_convert() {
-        let p = Person::from("");
-        assert_eq!(p.name, "John");
-        assert_eq!(p.age, 30);
-    }
-
-    #[test]
-    fn test_good_convert() {
-        let p = Person::from("Mark,20");
-        assert_eq!(p.name, "Mark");
-        assert_eq!(p.age, 20);
-    }
-
-    #[test]
-    fn test_bad_age() {
-        let p = Person::from("Mark,twenty");
-        assert_eq!(p.name, "John");
-        assert_eq!(p.age, 30);
-    }
-
-    #[test]
-    fn test_missing_comma_and_age() {
-        let p: Person = Person::from("Mark");
-        assert_eq!(p.name, "John");
-        assert_eq!(p.age, 30);
-    }
-
-    #[test]
-    fn test_missing_age() {
-        let p: Person = Person::from("Mark,");
-        assert_eq!(p.name, "John");
-        assert_eq!(p.age, 30);
-    }
-
-    #[test]
-    fn test_missing_name() {
-        let p: Person = Person::from(",1");
-        assert_eq!(p.name, "John");
-        assert_eq!(p.age, 30);
-    }
-
-    #[test]
-    fn test_missing_name_and_age() {
-        let p: Person = Person::from(",");
-        assert_eq!(p.name, "John");
-        assert_eq!(p.age, 30);
-    }
-
-    #[test]
-    fn test_missing_name_and_invalid_age() {
-        let p: Person = Person::from(",one");
-        assert_eq!(p.name, "John");
-        assert_eq!(p.age, 30);
-    }
-
-    #[test]
-    fn test_trailing_comma() {
-        let p: Person = Person::from("Mike,32,");
-        assert_eq!(p.name, "John");
-        assert_eq!(p.age, 30);
-    }
-
-    #[test]
-    fn test_trailing_comma_and_some_string() {
-        let p: Person = Person::from("Mike,32,dog");
-        assert_eq!(p.name, "John");
-        assert_eq!(p.age, 30);
+    fn fahrenheit_to_celsius() {
+        for (celsius, fahrenheit) in CASES {
+            let Celsius(actual) = Fahrenheit(fahrenheit).into();
+            assert_eq!(actual.round(), celsius);
+        }
     }
 }
